@@ -32,6 +32,8 @@
     hexo g
     hexo s
     ```
+- 官方主题地址: [https://hexo.io/themes/](https://hexo.io/themes/) 
+- Fluid地址: [https://github.com/fluid-dev/hexo-theme-fluid](https://github.com/fluid-dev/hexo-theme-fluid)
 
 ## 新增文章  
 - 设置资源文件夹
