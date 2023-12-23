@@ -66,3 +66,7 @@
     token: xxxxxxx
     ```
     ![](token.png)
+
+## Fluid使用手册
+
+[https://hexo.fluid-dev.com/docs/guide/](https://hexo.fluid-dev.com/docs/guide/)

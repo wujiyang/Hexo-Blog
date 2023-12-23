@@ -346,7 +346,7 @@ navbar:
     - { key: "category", link: "/categories/", icon: "iconfont icon-category-fill" }
     - { key: "tag", link: "/tags/", icon: "iconfont icon-tags-fill" }
     - { key: "about", link: "/about/", icon: "iconfont icon-user-fill" }
-    #- { key: "links", link: "/links/", icon: "iconfont icon-link-fill" }
+    # - { key: "links", link: "/links/", icon: "iconfont icon-link-fill" }
 
 # 搜索功能，基于 hexo-generator-search 插件，若已安装其他搜索插件请关闭此功能，以避免生成多余的索引文件
 # Search feature, based on hexo-generator-search. If you have installed other search plugins, please disable this feature to avoid generating redundant index files
@@ -428,7 +428,7 @@ footer:
   # 展示网站的 PV、UV 统计数
   # Display website PV and UV statistics
   statistics:
-    enable: false
+    enable: true
 
     # 统计数据来源，使用 leancloud 需要设置 `web_analytics: leancloud` 中的参数；使用 busuanzi 不需要额外设置，但是有时不稳定，另外本地运行时 busuanzi 显示统计数据很大属于正常现象，部署后会正常
     # Data source. If use leancloud, you need to set the parameter in `web_analytics: leancloud`
@@ -461,7 +461,7 @@ index:
   # 头图高度，屏幕百分比
   # Height ratio of banner image
   # Available: 0 - 100
-  banner_img_height: 100
+  banner_img_height: 50
 
   # 头图黑色蒙版的不透明度，available: 0 - 1.0， 1 是完全不透明
   # Opacity of the banner mask, 1.0 is completely opaque
@@ -507,7 +507,7 @@ index:
   # 打开文章的标签方式
   # The browser tag to open the post
   # Available: _blank | _self
-  post_url_target: _self
+  post_url_target: _blank
 
   # 是否显示文章信息（时间、分类、标签）
   # Meta information of post
@@ -529,7 +529,7 @@ index:
 #---------------------------
 post:
   banner_img: /img/default.png
-  banner_img_height: 70
+  banner_img_height: 50
   banner_mask_alpha: 0.3
 
   # 文章在首页的默认封面图，当没有指定 index_img 时会使用该图片，若两者都为空则不显示任何图片
@@ -547,7 +547,7 @@ post:
     # 文章日期，优先根据 front-matter 里 date 字段，其次是 md 文件日期
     # Post date, based on `date` field in front-matter, if not set, based on create date of .md file
     date:
-      enable: true
+      enable: false
       # 格式参照 ISO-8601 日期格式化
       # ISO-8601 date format
       # See: http://momentjs.cn/docs/#/parsing/string-format/
@@ -892,7 +892,7 @@ discuss:
 #---------------------------
 archive:
   banner_img: /img/default.png
-  banner_img_height: 60
+  banner_img_height: 50
   banner_mask_alpha: 0.3
 
 
@@ -903,7 +903,7 @@ archive:
 category:
   enable: true
   banner_img: /img/default.png
-  banner_img_height: 60
+  banner_img_height: 50
   banner_mask_alpha: 0.3
 
   # 分类的排序字段，前面带减号是倒序，不带减号是正序
@@ -932,7 +932,7 @@ category:
 tag:
   enable: true
   banner_img: /img/default.png
-  banner_img_height: 80
+  banner_img_height: 50
   banner_mask_alpha: 0.3
   tagcloud:
     min_font: 15
@@ -949,11 +949,11 @@ tag:
 about:
   enable: true
   banner_img: /img/default.png
-  banner_img_height: 60
+  banner_img_height: 50
   banner_mask_alpha: 0.3
   avatar: /img/avatar.png
   name: "邬小阳"
-  intro: "An elegant theme for Hexo"
+  intro: ""
   # 更多图标可从 https://hexo.fluid-dev.com/docs/icon/ 查找，`class` 代表图标的 css class，添加 `qrcode` 后，图标不再是链接而是悬浮二维码
   # More icons can be found from https://hexo.fluid-dev.com/docs/en/icon/  `class` is the css class of the icon. If adding `qrcode`, The icon is no longer a link, but a hovering QR code
   icons:
@@ -972,7 +972,7 @@ about:
 #---------------------------
 page:
   banner_img: /img/default.png
-  banner_img_height: 60
+  banner_img_height: 50
   banner_mask_alpha: 0.3
 
 
@@ -983,7 +983,7 @@ page:
 page404:
   enable: true
   banner_img: /img/default.png
-  banner_img_height: 85
+  banner_img_height: 55
   banner_mask_alpha: 0.3
   # 重定向到首页的延迟(毫秒)
   # Delay in redirecting to home page (milliseconds)
@@ -997,7 +997,7 @@ page404:
 links:
   enable: true
   banner_img: /img/default.png
-  banner_img_height: 60
+  banner_img_height: 50
   banner_mask_alpha: 0.3
   # 友链的成员项
   # Member item of page
