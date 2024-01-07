@@ -57,7 +57,8 @@
     - 每次更新后需同步新仓库，比较麻烦不建议使用
 - 方案二  
     - 安装hexo-deployer-git ```npm install hexo-deployer-git --save```
-    - 修改跟目录下的_config.yml, 配置github信息
+    - 修改跟目录下的_config.yml, 配置github信息 
+    -  ```hexo g / hexo d```即可
     ```
     deploy:
     type: git
