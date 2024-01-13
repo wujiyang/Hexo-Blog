@@ -19,7 +19,8 @@ categories:
 - 漏桶
 - 令牌桶
 
-## 1. 计数器 
+## 1. 计数器   
+### 1.1 原理  
 计数器是一种最简单限流算法，其原理就是：**在一段时间间隔内，对请求进行计数，与阀值进行比较判断是否需要限流，一旦到了时间临界点，将计数器清零。**
 
 - 可以在程序中设置一个变量 count，当过来一个请求我就将这个数 +1，同时记录请求时间。
@@ -27,49 +28,8 @@ categories:
 - 如果在 1 分钟内并且超过设定的频次则证明请求过多，后面的请求就拒绝掉。
 - 如果该请求与第一个请求的间隔时间大于计数周期，且 count 值还在限流范围内，就重置 count。  
 
-![](/img/Golang限流/1.png)
+![](/img/Golang限流/1.png) 
 
-### 1.1 简单实现
-``` go
-type LimitRate struct {
-   rate  int           //阀值
-   begin time.Time     //计数开始时间
-   cycle time.Duration //计数周期
-   count int           //收到的请求数
-   lock  sync.Mutex    //锁
-}
-
-func (limit *LimitRate) Allow() bool {
-   limit.lock.Lock()
-   defer limit.lock.Unlock()
-
-   // 判断收到请求数是否达到阀值
-   if limit.count == limit.rate-1 {
-      now := time.Now()
-      // 达到阀值后，判断是否是请求周期内
-      if now.Sub(limit.begin) >= limit.cycle {
-         limit.Reset(now)
-         return true
-      }
-      return false
-   } else {
-      limit.count++
-      return true
-   }
-}
-
-func (limit *LimitRate) Set(rate int, cycle time.Duration) {
-   limit.rate = rate
-   limit.begin = time.Now()
-   limit.cycle = cycle
-   limit.count = 0
-}
-
-func (limit *LimitRate) Reset(begin time.Time) {
-   limit.begin = begin
-   limit.count = 0
-}
-```  
 ### 1.2 缺点
 计数器算法存在“时间临界点”缺陷。比如每一分钟限制200个请求，可以在00:00:00-00:00:58秒里面都没有请求，在00:00:59瞬间发送200个请求，这个对于计数器算法来是允许的，然后在00:01:00再次发送200个请求，意味着在短短1s内发送了400个请求，如果量更大呢，系统可能会承受不住瞬间流量，导致系统崩溃。  
 ![](/img/Golang限流/2.png)
@@ -89,6 +49,75 @@ func (limit *LimitRate) Reset(begin time.Time) {
 
 ### 2.2 缺点
 滑动窗口算法是计数器算法的一种改进[计数器就是只有一个格子的滑动窗口]，但从根本上并没有真正解决固定窗口算法的临界突发流量问题。想让限流做的更精确只能划分更多的格子。
-## 漏桶算法
 
-## 令牌桶算法
+## 3. 漏桶算法
+### 3.1 原理  
+漏桶算法是首先想象有一个木桶，桶的容量是固定的。当有请求到来时先放到木桶中，处理请求的worker以固定的速度从木桶中取出请求进行相应。如果木桶已经满了，直接返回请求频率超限的错误码或者页面。   
+
+漏桶算法是流量最均匀的限流实现方式，一般用于流量“整形”。例如保护数据库的限流，先把对数据库的访问加入到木桶中，worker再以db能够承受的qps从木桶中取出请求，去访问数据库。
+![](/img/Golang限流/4.png)    
+
+### 3.2 缺点
+木桶流入请求的速率是不固定的，但是流出的速率是恒定的。这样的话能保护系统资源不被打满，但是面对突发流量时会有大量请求失败，不适合电商抢购和微博出现热点事件等场景的限流。  
+
+## 4. 令牌桶算法
+### 4.1 原理 
+令牌桶是反向的"漏桶"，它是以恒定的速度往木桶里加入令牌，木桶满了则不再加入令牌。服务收到请求时尝试从木桶中取出一个令牌，如果能够得到令牌则继续执行后续的业务逻辑。如果没有得到令牌，直接返回访问频率超限的错误码或页面等，不继续执行后续的业务逻辑。
+
+特点：由于木桶内只要有令牌，请求就可以被处理，所以令牌桶算法可以支持突发流量
+![](/img/Golang限流/0.png)      
+
+同时由于往木桶添加令牌的速度是恒定的，且木桶的容量有上限，所以单位时间内处理的请求书也能够得到控制，起到限流的目的。假设加入令牌的速度为 1 token/10ms，桶的容量为500，在请求比较的少的时候（小于每10毫秒1个请求）时，木桶可以先"攒"一些令牌（最多500个）。当有突发流量时，一下把木桶内的令牌取空，也就是有500个在并发执行的业务逻辑，之后要等每10ms补充一个新的令牌才能接收一个新的请求。
+
+### 4.2 适用场景
+适合电商抢购或者微博出现热点事件这种场景，因为在限流的同时可以应对一定的突发流量。如果采用漏桶那样的均匀速度处理请求的算法，在发生热点时间的时候，会造成大量的用户无法访问，对用户体验的损害比较大。 
+
+### 4.3 实现
+golang官方实现了令牌桶限流方法`Limiter`
+
+``` go
+type Limiter struct {
+	mu     sync.Mutex
+	limit  Limit
+	burst  int // 令牌桶的大小
+	tokens float64
+	last time.Time // 上次更新tokens的时间
+	lastEvent time.Time // 上次发生限速器事件的时间（通过或者限制都是限速器事件）
+} 
+```
+其主要字段的作用是：  
+- limit：limit字段表示往桶里放Token的速率，它的类型是Limit，是int64的类型别名。设置limit时既可以用数字指定每秒向桶中放多少个Token，也可以指定向桶中放Token的时间间隔，其实指定了每秒放Token的个数后就能计算出放每个Token的时间间隔了。
+- burst: 令牌桶的大小。
+- tokens: 桶中的令牌。
+- last: 上次往桶中放 Token 的时间。
+- lastEvent：上次发生限速器事件的时间（通过或者限制都是限速器事件） 
+
+#### 4.3.1 构造限流器  
+``` go
+limiter := rate.NewLimiter(10, 100)
+``` 
+这里有两个参数：
+- 第一个参数是 r Limit，设置的是限流器Limiter的limit字段，代表每秒可以向 Token 桶中产生多少 token。Limit 实际上是 float64 的别名。
+- 第二个参数是 b int，b 代表 Token 桶的容量大小，也就是设置的限流器 Limiter 的burst字段。
+
+那么，对于以上例子来说，其构造出的限流器的令牌桶大小为 100, 以每秒 10 个 Token 的速率向桶中放置 Token。
+
+#### 4.3.2 使用限流器  
+Limiter 提供了三类方法供程序消费 Token，可以每次消费一个 Token，也可以一次性消费多个 Token。 每种方法代表了当 Token 不足时，各自不同的对应手段，可以阻塞等待桶中Token补充，也可以直接返回取Token失败。   
+
+其中比较常见的是Wait/WaitN方法 
+``` go
+func (lim *Limiter) Wait(ctx context.Context) (err error)
+func (lim *Limiter) WaitN(ctx context.Context, n int) (err error)
+``` 
+Wait 实际上就是 WaitN(ctx,1)。   
+
+当使用 Wait 方法消费 Token 时，如果此时桶内 Token 数组不足 (小于 N)，那么 Wait 方法将会阻塞一段时间，直至 Token 满足条件。如果充足则直接返回。  
+
+这里可以看到，Wait 方法有一个 context 参数。我们可以设置 context 的 Deadline 或者 Timeout，来决定此次 Wait 的最长时间。     
+
+其他还有两种用法分别如下，具体使用方法可查阅官方文档信息
+- Allow/AllowN 
+- Reserve/ReserverN  
+
+
