@@ -9,11 +9,17 @@
     ```js 
     npm install -g hexo-cli
     ```
-- 创建项目（可酌情省略）  
+- 创建项目
     ```js
     hexo init hexo-blog
     cd hexo-blog
     npm install  
+    ```
+- 已有项目
+    ```js
+    git clone xxx
+    cd xxx
+    npm install
     ```
 - hexo本地启动   
     ```js
