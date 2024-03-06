@@ -189,7 +189,93 @@ func (q Queue[T]) Size() int {
 ```
 
 ## 4. 接口   
-To Be Continued！
+- 在泛型出来之前，接口的定义是：接口是一个方法集   
+```golang
+type error interface{
+	Error() string
+}
+```
+- 在泛型出来之后，接口的定义是：接口是一个类型集  
+```golang
+type number interface{
+	int | float32
+}
+```
+### 4.1 并集、交集、空集
+- 并集：使用|连接的就是并集      
+```golang
+// number 是下列基础类型的并集
+type number interface{
+	int | int32 | uint32 | int64 | uint64
+}
+```
+- 交集：如果一个接口的定义包含多行类型，就取他们的交集。  
+```golang
+type Int interface {
+    int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64
+}
+
+type Uint interface {
+    uint | uint8 | uint16 | uint32 | uint64
+}
+
+// 接口Status代表 Int和Uint的交集
+type Status interface {  
+    Int
+    Uint
+}
+```
+- 空集：如果多行类型没有交集，就是空集.    
+```golang 
+// 类型 ~int 和 ~float 没有相交的类型，所以接口 Bad 代表的类型集为空
+type Bad interface {
+    ~int
+    ~float 
+} 
+``` 
+### 4.2 接口类型
+- 基本接口: 接口的定义中只有方法    
+```golang 
+// 接口中只有方法，所以是基本接口
+type MyError interface { 
+    Error() string
+}
+```
+- 一般接口: 接口的定义中不仅有方法，还有类型    
+``` golang
+// 接口 Uint 中有类型，所以是一般接口
+type Uint interface { 
+    ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
+}
+
+// ReadWriter 接口既有方法也有类型，所以是一般接口
+type ReadWriter interface {  
+    ~string | ~[]rune
+
+    Read(p []byte) (n int, err error)
+    Write(p []byte) (n int, err error)
+}
+
+// 一般接口类型不能用来定义变量，只能用于泛型的类型约束中  
+
+// 错误。Uint是一般接口，只能用于类型约束，不得用于变量定义
+var uintInf Uint   
+```
+- 如何实现一般接口？ 
+```golang
+// 先定义一个具体的类型，然后再实现具体的方法 
+
+// StringReadWriter 实现了接口 ReadWriter
+type StringReadWriter string
+
+func (s StringReadWriter) Read(p []byte) (n int, err error) {
+    // ...
+}
+
+func (s StringReadWriter) Write(p []byte) (n int, err error) {
+    // ...
+}
+``` 
 
 ## 参考资料  
 
