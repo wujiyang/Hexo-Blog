@@ -1,6 +1,6 @@
 ---
 title: Golang中的Defer、Panic和Recover
-date: 2024-08-03 16:04:50
+date: 2024-07-13 16:04:50
 index_img: /img/Golang中defer-panic-recvover分析/0.jpg
 tags:
     - Golang
@@ -16,7 +16,7 @@ Golang中没有类似java的try catch机制进行异常处理，而是引入了d
 ## 1. Defer
 defer是go语言提供的一种用于注册延迟调用的机制：让函数或者语句可以在当前函数执行完毕后执行（包括通过return正常结束或者panic导致的异常结束）。
 
-常用于一些操作后的收尾工作，比如关闭连接、释放锁、关闭文件等，使用比较优雅。  
+常用于一些操作后的收尾工作，比如关闭连接、释放锁、关闭文件等，使用起来比较优雅。  
 ``` golang 
 f, _ := os.Open("defer.txt")
 defer f.Close()  
