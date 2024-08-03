@@ -105,7 +105,7 @@ func f() (r int) {
 
 从以上的实际案例中可以看到：
 
-<font color="red">能通过defer修改返回值的场景，一定是有命名返回值的函数场景。</font>  
+📌 <font color="red">能通过defer修改返回值的场景，一定是有命名返回值的函数场景。</font>  
 
 ## 2. Painc和Recover
 当go在运行过程中发送异常时，Go运行时会触发运行时panic，并在调用它的函数中向本层以及所有上层逐级抛出，若一直没有recover捕获，程序最终会终止。  
@@ -132,7 +132,7 @@ func g() {
 // defer in
 // hello, I'm panic
 ```
-<font color="red">注意：defer中的recover仅对当前协程生效，且仅在直接被defer函数调用才有效</font>    
+📌 <font color="red">注意：defer中的recover仅对当前协程生效，且仅在直接被defer函数调用才有效</font>    
 
 
 ### 2.1 Recover使用规则 
