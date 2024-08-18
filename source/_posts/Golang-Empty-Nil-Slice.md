@@ -104,7 +104,7 @@ fmt.Printf("s3 (addr: %p): %+8v\n", &s3, *(*reflect.SliceHeader)(unsafe.Pointer(
 // s2 (addr: 0xc0000080f0): {Data:12760120 Len:       0 Cap:       0}
 // s3 (addr: 0xc000008108): {Data:12760120 Len:       0 Cap:       0}
 
-```   
+```
 
 
 
