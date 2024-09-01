@@ -572,7 +572,7 @@ post:
     # 浏览量计数
     # Number of visits
     views:
-      enable: false
+      enable: true
       # 统计数据来源
       # Data Source
       # Options: busuanzi | leancloud
@@ -935,8 +935,8 @@ tag:
   banner_img_height: 50
   banner_mask_alpha: 0.3
   tagcloud:
-    min_font: 15
-    max_font: 30
+    min_font: 10
+    max_font: 40
     unit: px
     start_color: "#BBBBEE"
     end_color: "#337ab7"
