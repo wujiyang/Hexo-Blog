@@ -104,4 +104,4 @@ deploy:
   type: git
   repo: https://github.com/wujiyang/wujiyang.github.io.git
   branch: master
-  token: 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
+  token: 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
