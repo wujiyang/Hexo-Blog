@@ -7,6 +7,7 @@ tags:
     - Golang
 categories:
     - Golang
+		- 并发编程
 ---
 
 Context 是 Go 语言中用于处理并发操作的一个重要概念。包含 goroutine 的运行状态、环境、现场等信息。Context 主要用来在 goroutine 之间传递上下文信息，包括：取消信号、超时时间、截止时间、Key-Value等。

@@ -21,7 +21,7 @@ import_script(`
       linkClass       : 'tocbot-link',
       activeLinkClass : 'tocbot-active-link',
       listClass       : 'tocbot-list',
-      isCollapsedClass: true,
+      isCollapsedClass: 'tocbot-is-collapsed',
       collapsibleClass: 'tocbot-is-collapsible',
       scrollSmooth    : true,
       includeTitleTags: true,
@@ -30,7 +30,7 @@ import_script(`
     if (toc.find('.toc-list-item').length > 0) {
       toc.css('visibility', 'visible');
     }
-    
+
     Fluid.events.registerRefreshCallback(function() {
       if ('tocbot' in window) {
         tocbot.refresh();
