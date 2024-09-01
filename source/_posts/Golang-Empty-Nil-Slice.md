@@ -71,7 +71,7 @@ fmt.Println(slice6, len(slice6), cap(slice6), slice6 == nil)
 // [nil nil nil nil nil] 5 5 false
 ```
 
-## 2 底层原理 
+## 2. 底层原理 
 golang的slice底层结构体由3个字段构成：
 
 ```golang

@@ -277,7 +277,7 @@ func (s StringReadWriter) Write(p []byte) (n int, err error) {
 }
 ``` 
 
-## 参考资料  
+## 5. 参考资料  
 
 - https://www.kunkkawu.com/archives/shen-ru-li-jie-golang-de-fan-xing  
 - https://juejin.cn/post/7229462763947917367 

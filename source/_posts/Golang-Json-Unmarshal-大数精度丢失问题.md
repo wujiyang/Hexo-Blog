@@ -15,7 +15,7 @@ categories:
 
 <!-- more -->   
 
-## 案例
+## 1. 案例介绍
 
 假设有一个长度为17的json大数字
 ```golang
@@ -46,7 +46,7 @@ func ParseWithInterface() {
 // {"id":10000649949036000}  
 
 ```
-## 原因  
+## 2. 原因分析  
 
 原因就出在了interface{}上，在golang中，当数据结构未知，使用map[string]interface{}接收反序列化结果时，会使用float64来进行结果解析，而float类型在处理的过程中时会有精度丢失的，一般超过16位就会发生，同时float64在处理的数据的时候，一般超过6位就会变成科学记数法。使用float64对json number进行解析可以在json的官方代码中找到。
 
@@ -62,11 +62,11 @@ func ParseWithInterface() {
 > //	nil for JSON null
 >
 
-## 解决方案
+## 3. 解决方案
 
 既然上文已经说了int64反序列化精度丢失的原因是使用了float64进行解析，那么我们只需要在解析时强行指定不使用float64解析即可。
 
-### 使用Int64解析
+### 3.1 使用Int64解析
 在知道具体类型的情况下，可以直接定义结构体为map[string]int64, 这样在解析时，就会使用int64进行解析。
 
 ```golang
@@ -84,7 +84,7 @@ func ParseWithInt64() {
 // map[id:10000649949036001]
 ```
 
-### 利用UseNumber 
+### 3.2 利用UseNumber 
 golang json提供了一种额外的解析方式，可以在解析的过程使用指定使用Number类型而不是float64进行解析，这样就可以避免精度丢失的问题。
 
 ```golang
