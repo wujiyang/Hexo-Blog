@@ -102,6 +102,6 @@ theme: fluid
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://oauth2: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@github.com/wujiyang/wujiyang.github.io.git
+  repo: https://github.com/wujiyang/wujiyang.github.io.git
   branch: master
   token: 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
