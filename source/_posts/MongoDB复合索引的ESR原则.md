@@ -1,7 +1,7 @@
 ---
 title: MongoDB复合索引的ESR原则
 date: 2024-02-21 22:30:40
-index_img: /img/MongoDB复合索引的ESR原则/1.png
+index_img: /img/MongoDB复合索引的ESR原则/3.png
 tags:
     - MongoDB
     - 索引
