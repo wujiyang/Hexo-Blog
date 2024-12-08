@@ -11,8 +11,8 @@ layout: about
 <!-- 
 
 [![](https://img.shields.io/badge/Blog-https://wujiyang.github.io-green&style=flat)](https://wujiyang.github.io)
-
  -->
+
 
 
 
@@ -23,7 +23,13 @@ layout: about
 
 ---------
 
-- 🧑🏻‍💻 I’m a backend developer.
+- 🧑🏻‍💻 I’m a software developer ...
+
+
+
+---------
+- 🔭 Currently Working At ByteDance ...
+- 🌱 Former Tencent Algorithm Engineer ...
 
 
 
