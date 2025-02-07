@@ -1,6 +1,6 @@
 ---
 title: Golang条件变量-sync.Cond
-date: 2025-12-19 20:21:21
+date: 2024-12-19 20:21:21
 index_img: /img/Golang条件变量-Cond/1.png
 tags:
     - Cond
